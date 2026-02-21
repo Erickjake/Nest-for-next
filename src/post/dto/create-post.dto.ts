@@ -21,6 +21,9 @@ export class CreatePostDto {
 
   @IsOptional()
   @IsString({ message: 'coverImageUrl precisa ser uma string' })
-  @IsUrl({ require_tld: false })
+  @IsUrl(
+    { require_tld: false },
+    { message: 'coverImageUrl precisa ser uma URL válida' },
+  )
   coverImageUrl?: string;
 }
