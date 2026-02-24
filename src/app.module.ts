@@ -4,6 +4,10 @@ import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UploadModule } from './upload/upload.module';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { AllExceptionsFilter } from './common/filters/all-exception.filter';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 @Module({
   imports: [
     AuthModule,
@@ -11,6 +15,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     PostModule,
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 10000, // Tempo em segundos para resetar a contagem
+          limit: 100, // Número máximo de requisições permitidas dentro do ttl
+          blockDuration: 5000, // Tempo em segundos que o IP ficará bloqueado após atingir o limite
+        },
+      ],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => {
@@ -34,8 +47,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         };
       },
     }),
+    UploadModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

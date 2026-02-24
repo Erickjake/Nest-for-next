@@ -77,7 +77,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "title": "Título do post",
+  "title": "Título do post sdf",
   "excerpt": "Excerto do post",
   "content": "Conteúdo",
   "coverImageUrl": "http://localhost"
@@ -108,7 +108,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwtToken}}
 
 {
-  "title": "PUBLISHED Título do post",
+  "title": "PUBLISHED Título do post sdf",
   "excerpt": "NOVO - Excerto",
   "content": "NOVO - Conteúdo",
   "published": true
@@ -128,10 +128,10 @@ Authorization: Bearer {{jwtToken}}
 Content-Type: multipart/form-data; boundary=----BryenFormBoundary
 
 ------BryenFormBoundary
-Content-Disposition: form-data; name="file"; filename="image.png"
-Content-Type: image/png
+Content-Disposition: form-data; name="file"; filename="image.webp"
+Content-Type: image/webp
 
-< ../dev/images/image.gif
+< ../dev/images/image.webp
 ------BryenFormBoundary--
 
 ### Read Image

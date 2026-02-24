@@ -41,6 +41,16 @@ export class PostService {
     });
     return posts;
   }
+  async findAll(postData: Partial<Post>) {
+    const posts = await this.postRepository.find({
+      where: postData,
+      relations: ['author'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    return posts;
+  }
   async findOneOwned(postData: Partial<Post>, author: User) {
     const post = await this.postRepository.findOne({
       where: {
@@ -101,5 +111,16 @@ export class PostService {
     post.published = dto.published ?? post.published;
 
     return this.postRepository.save(post);
+  }
+
+  async remove(postData: Partial<Post>, author: User) {
+    const post = await this.findOneOrFail(postData);
+    await this.postRepository.delete({
+      ...postData,
+      author: {
+        id: author.id,
+      },
+    });
+    return post;
   }
 }
